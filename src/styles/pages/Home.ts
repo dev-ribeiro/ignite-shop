@@ -6,21 +6,20 @@ export const HomeContainer = styled('main', {
   maxWidth: 'calc(100vw - ((100vw - 1180px)/2))',
   minHeight: 650,
   display: 'flex',
-  gap: '1rem',
 })
 
 export const Product = styled('div', {
+  minWidth: 540,
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
   borderRadius: 8,
   padding: '0.25rem',
   cursor: 'pointer',
   position: 'relative',
+  overflow: 'hidden',
 
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-
-  overflow: 'hidden',
 
   img: {
     objectFit: 'cover',
@@ -39,7 +38,7 @@ export const Product = styled('div', {
     alignItems: 'center',
     justifyContent: 'space-between',
 
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
 
     transform: 'translateY(110%)',
     opacity: 0,
@@ -47,6 +46,7 @@ export const Product = styled('div', {
 
     strong: {
       fontSize: '$lg',
+      color: '$gray100',
     },
 
     span: {

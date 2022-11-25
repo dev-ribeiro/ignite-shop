@@ -8,7 +8,7 @@ export const HomeContainer = styled('main', {
   display: 'flex',
 })
 
-export const Product = styled('div', {
+export const Product = styled('a', {
   minWidth: 540,
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
   borderRadius: 8,

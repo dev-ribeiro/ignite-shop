@@ -1,11 +1,8 @@
 import { globalStyles } from '../styles/global'
-import logoImage from '../assets/logo.svg'
-import { Container, Header, IconWrapper } from '../styles/pages/App'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Handbag } from 'phosphor-react'
+import { Container } from '../styles/pages/App'
 import { StoreContextProvider } from '../contexts/StoreContext'
 import { CheckoutCart } from './components/CheckoutCart'
+import { Header } from './components/Header'
 
 globalStyles()
 
@@ -14,14 +11,7 @@ export default function App({ Component, pageProps }) {
     <StoreContextProvider>
       <Container>
         <CheckoutCart />
-        <Header>
-          <Link href="/" prefetch={false}>
-            <Image src={logoImage} alt="" />
-          </Link>
-          <IconWrapper>
-            <Handbag size={24} />
-          </IconWrapper>
-        </Header>
+        <Header />
         <Component {...pageProps} />
       </Container>
     </StoreContextProvider>

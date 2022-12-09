@@ -1,5 +1,7 @@
 import Image from 'next/image'
 import { X } from 'phosphor-react'
+import { useContext } from 'react'
+import { StoreContext } from '../../../contexts/StoreContext'
 import {
   CheckoutCartContainer,
   ProductCheckout,
@@ -7,9 +9,15 @@ import {
 } from './styles'
 
 export function CheckoutCart() {
+  const { showCheckoutCart, closeCheckoutCart } = useContext(StoreContext)
+
+  if (!showCheckoutCart) {
+    return <aside></aside>
+  }
+
   return (
     <CheckoutCartContainer>
-      <X size={22} />
+      <X size={22} onClick={() => closeCheckoutCart()} />
       <h2>Sacola de compras</h2>
       <ProductCheckoutContainer>
         <ProductCheckout>

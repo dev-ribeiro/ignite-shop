@@ -1,6 +1,7 @@
+import axios from 'axios'
 import Image from 'next/image'
 import { X } from 'phosphor-react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { StoreContext } from '../../contexts/StoreContext'
 import {
   CheckoutCartContainer,
@@ -11,7 +12,29 @@ import {
 } from './styles'
 
 export function CheckoutCart() {
-  const { showCheckoutCart, closeCheckoutCart } = useContext(StoreContext)
+  const { checkoutPricesId, showCheckoutCart, closeCheckoutCart } =
+    useContext(StoreContext)
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+    useState(false)
+
+  console.log(checkoutPricesId)
+
+  async function handleBuyProduct() {
+    try {
+      setIsCreatingCheckoutSession(true)
+      const response = await axios.post('/api/checkout', {
+        checkoutPricesId: JSON.stringify(checkoutPricesId),
+      })
+
+      const { checkoutUrl } = response.data
+
+      window.location.href = checkoutUrl
+    } catch (error) {
+      // Conectar com Datadog ou Sentry
+      setIsCreatingCheckoutSession(false)
+      alert('Falha ao registrar o checkout')
+    }
+  }
 
   if (!showCheckoutCart) {
     return <aside></aside>
@@ -43,7 +66,12 @@ export function CheckoutCart() {
           <span>Valor total</span>
           <span>R$ 270,00</span>
         </OrderPrice>
-        <button>Finalizar compra</button>
+        <button
+          onClick={() => handleBuyProduct()}
+          disabled={isCreatingCheckoutSession}
+        >
+          Finalizar compra
+        </button>
       </OrderSummaryContainer>
     </CheckoutCartContainer>
   )

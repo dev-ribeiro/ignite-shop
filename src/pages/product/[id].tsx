@@ -1,10 +1,11 @@
-import axios from 'axios'
+// import axios from 'axios'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Stripe from 'stripe'
+import { StoreContext } from '../../contexts/StoreContext'
 import { stripe } from '../../lib/stripe'
 import {
   ImageContainer,
@@ -24,29 +25,25 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
+  const { checkoutPricesId, addProductToCheckout } = useContext(StoreContext)
   const { isFallback } = useRouter()
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false)
+  const [isProductIsInCheckout, setisProductIsInCheckout] = useState(false)
+  const searchProductInCheckout = checkoutPricesId.find((id) => {
+    return id === product.defaultPriceId
+  })
+
+  useEffect(() => {
+    if (searchProductInCheckout) {
+      setisProductIsInCheckout(true)
+    }
+  }, [searchProductInCheckout])
+
+  function handleSendProductToCheckoutCart() {
+    addProductToCheckout(product.defaultPriceId)
+  }
 
   if (isFallback) {
     return <h1>Loading...</h1>
-  }
-
-  async function handleBuyProduct() {
-    try {
-      setIsCreatingCheckoutSession(true)
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
-      })
-
-      const { checkoutUrl } = response.data
-
-      window.location.href = checkoutUrl
-    } catch (error) {
-      // Conectar com Datadog ou Sentry
-      setIsCreatingCheckoutSession(false)
-      alert('Falha ao registrar o checkout')
-    }
   }
 
   return (
@@ -64,10 +61,12 @@ export default function Product({ product }: ProductProps) {
 
           <p>{product.description}</p>
           <button
-            disabled={isCreatingCheckoutSession}
-            onClick={handleBuyProduct}
+            disabled={isProductIsInCheckout}
+            onClick={handleSendProductToCheckoutCart}
           >
-            Comprar agora
+            {isProductIsInCheckout
+              ? 'Produto adicionado com sucesso'
+              : 'Adicionar na sacola'}
           </button>
         </ProductDetails>
       </ProductContainer>

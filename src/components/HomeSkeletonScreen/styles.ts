@@ -1,4 +1,4 @@
-import { styled } from '@stitches/react'
+import { styled } from '../../styles/'
 
 export const HomeSkeletonScreenContainer = styled('div', {
   marginLeft: 'auto',

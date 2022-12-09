@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { X } from 'phosphor-react'
 import { useContext } from 'react'
-import { StoreContext } from '../../../contexts/StoreContext'
+import { StoreContext } from '../../contexts/StoreContext'
 import {
   CheckoutCartContainer,
   ProductCheckout,

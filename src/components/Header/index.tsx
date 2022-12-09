@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import logoImage from '../../../assets/logo.svg'
+import logoImage from '../../assets/logo.svg'
 import { HeaderContainer, IconWrapper } from './styles'
 import { Handbag } from 'phosphor-react'
 import { useContext } from 'react'
-import { StoreContext } from '../../../contexts/StoreContext'
+import { StoreContext } from '../../contexts/StoreContext'
 
 export function Header() {
   const { openCheckoutCart } = useContext(StoreContext)

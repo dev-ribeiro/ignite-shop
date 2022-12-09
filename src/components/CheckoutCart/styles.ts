@@ -2,7 +2,7 @@ import { styled } from '../../styles'
 
 export const CheckoutCartContainer = styled('aside', {
   width: '30rem',
-  height: '100%',
+  height: '100vh',
   padding: '3rem',
 
   position: 'fixed',
@@ -78,4 +78,47 @@ export const ProductCheckout = styled('div', {
     'img price' 1fr
     'img remove' 1fr
   `,
+})
+
+export const OrderSummaryContainer = styled('section', {
+  width: '100%',
+  maxWidth: '24rem',
+  position: 'absolute',
+  bottom: '3rem',
+
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+
+  '*': {
+    fontSize: '1rem',
+  },
+
+  '& > div': {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+
+  button: {
+    height: 69,
+    border: 'none',
+    borderRadius: 8,
+    fontSize: '1.125rem',
+    fontWeight: 'bold',
+    color: '$white',
+    background: '$green500',
+  },
+})
+
+export const OrderPrice = styled('div', {
+  marginBottom: '3rem',
+
+  'span:first-child': {
+    fontSize: '1.125rem',
+  },
+
+  'span:last-child': {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+  },
 })

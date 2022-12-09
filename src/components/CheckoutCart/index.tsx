@@ -4,6 +4,8 @@ import { useContext } from 'react'
 import { StoreContext } from '../../contexts/StoreContext'
 import {
   CheckoutCartContainer,
+  OrderPrice,
+  OrderSummaryContainer,
   ProductCheckout,
   ProductCheckoutContainer,
 } from './styles'
@@ -32,7 +34,17 @@ export function CheckoutCart() {
           <button>Remover</button>
         </ProductCheckout>
       </ProductCheckoutContainer>
-      <div></div>
+      <OrderSummaryContainer>
+        <div>
+          <span>Quantidade</span>
+          <span>3 itens</span>
+        </div>
+        <OrderPrice>
+          <span>Valor total</span>
+          <span>R$ 270,00</span>
+        </OrderPrice>
+        <button>Finalizar compra</button>
+      </OrderSummaryContainer>
     </CheckoutCartContainer>
   )
 }

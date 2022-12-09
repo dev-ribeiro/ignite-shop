@@ -7,6 +7,9 @@ import { GetStaticProps } from 'next'
 import Stripe from 'stripe'
 import Link from 'next/link'
 import Head from 'next/head'
+import { Handbag } from 'phosphor-react'
+import { useContext } from 'react'
+import { StoreContext } from '../contexts/StoreContext'
 
 interface HomeProps {
   products: {
@@ -20,6 +23,8 @@ interface HomeProps {
 }
 
 export default function Home({ products }: HomeProps) {
+  const { openCheckoutCart } = useContext(StoreContext)
+
   const [sliderRef] = useKeenSlider({
     slides: {
       perView: 2,
@@ -35,15 +40,20 @@ export default function Home({ products }: HomeProps) {
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
           return (
-            <Link href={`/product/${product.id}`} key={product.id}>
-              <Product className="keen-slider__slide">
+            <Product className="keen-slider__slide" key={product.id}>
+              <Link href={`/product/${product.id}`}>
                 <Image src={product.imageUrl} width={720} height={540} alt="" />
-                <footer>
+              </Link>
+              <footer>
+                <div>
                   <strong>{product.name}</strong>
                   <span>{product.price}</span>
-                </footer>
-              </Product>
-            </Link>
+                </div>
+                <button onClick={() => openCheckoutCart()}>
+                  <Handbag size={32} />
+                </button>
+              </footer>
+            </Product>
           )
         })}
       </HomeContainer>

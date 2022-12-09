@@ -6,7 +6,7 @@ Desafio proposto pelo treinamento de React do Ignite. Este projete consiste num 
 
 ## Análise de requisitos
 
-- [ ] Criar a skeleton screen de carregamento
+- [x] Criar a skeleton screen de carregamento
 - [ ] Implementar a skeleton screen no load da aplicação
 - [ ] Criar o componente Arrow para navegar entre produtos
 - [ ] Criar a estrutura visual do componente de checkout

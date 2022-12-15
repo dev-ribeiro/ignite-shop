@@ -1,23 +1,32 @@
 import { createContext, ReactNode, useState } from 'react'
 
-interface StoreContextType {
-  showCheckoutCart: boolean
-  checkoutPricesId: string[]
-  openCheckoutCart: () => void
-  closeCheckoutCart: () => void
-  addProductToCheckout: (id) => void
-  removeProductFromCheckout: (id) => void
+interface Product {
+  id: string
+  name: string
+  imageUrl: string
+  price: string
+  description: string
+  defaultPriceId: string
 }
 
-export const StoreContext = createContext({} as StoreContextType)
+interface StoreContextType {
+  checkout: Product[]
+  showCheckoutCart: boolean
+  openCheckoutCart: () => void
+  closeCheckoutCart: () => void
+  addProductToCart: (product: Product) => void
+  removeProductFromCheckout: (product: Product) => void
+}
 
 interface StoreContextProviderType {
   children: ReactNode
 }
 
+export const StoreContext = createContext({} as StoreContextType)
+
 export function StoreContextProvider({ children }: StoreContextProviderType) {
+  const [checkout, setCheckout] = useState<Product[]>([])
   const [showCheckoutCart, setShowCheckoutCart] = useState(false)
-  const [checkoutPricesId, setCheckoutPricesId] = useState<string[]>([])
 
   function openCheckoutCart() {
     setShowCheckoutCart(true)
@@ -27,28 +36,28 @@ export function StoreContextProvider({ children }: StoreContextProviderType) {
     setShowCheckoutCart(false)
   }
 
-  function addProductToCheckout(id: string) {
-    setCheckoutPricesId((state) => {
-      return [...state, id]
+  function addProductToCart(product: Product) {
+    setCheckout((state) => {
+      return [...state, product]
     })
   }
 
-  function removeProductFromCheckout(id: string) {
-    const processProducts = checkoutPricesId.filter((productId) => {
-      return productId !== id
-    })
+  function removeProductFromCheckout(product: Product) {
+    const deletedProduct = checkout.filter(
+      (element) => element.id !== product.id,
+    )
 
-    setCheckoutPricesId(processProducts)
+    setCheckout(deletedProduct)
   }
 
   return (
     <StoreContext.Provider
       value={{
+        checkout,
         showCheckoutCart,
-        checkoutPricesId,
         openCheckoutCart,
         closeCheckoutCart,
-        addProductToCheckout,
+        addProductToCart,
         removeProductFromCheckout,
       }}
     >

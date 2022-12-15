@@ -1,7 +1,7 @@
 import { globalStyles } from '../styles/global'
 import { Container } from '../styles/pages/App'
 import { StoreContextProvider } from '../contexts/StoreContext'
-import { CheckoutCart } from '../components/CheckoutCart'
+import { CheckoutCart } from '../components/Cart'
 import { Header } from '../components/Header'
 
 globalStyles()

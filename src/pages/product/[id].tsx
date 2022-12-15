@@ -12,6 +12,7 @@ import {
   ProductContainer,
   ProductDetails,
 } from '../../styles/pages/Product'
+import { priceFormatter } from '../../utils/formatter'
 
 interface ProductProps {
   product: {
@@ -25,21 +26,21 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
-  const { checkoutPricesId, addProductToCheckout } = useContext(StoreContext)
+  const { checkout, addProductToCart } = useContext(StoreContext)
   const { isFallback } = useRouter()
   const [isProductIsInCheckout, setisProductIsInCheckout] = useState(false)
-  const searchProductInCheckout = checkoutPricesId.find((id) => {
-    return id === product.defaultPriceId
-  })
 
   useEffect(() => {
-    if (searchProductInCheckout) {
-      setisProductIsInCheckout(true)
-    }
-  }, [searchProductInCheckout])
+    const verifyProductInCheckout = checkout.find(
+      (element) => element.id === product.id,
+    )
+
+    verifyProductInCheckout && setisProductIsInCheckout(true)
+  }, [checkout])
 
   function handleSendProductToCheckoutCart() {
-    addProductToCheckout(product.defaultPriceId)
+    console.log(product)
+    addProductToCart(product)
   }
 
   if (isFallback) {
@@ -57,7 +58,7 @@ export default function Product({ product }: ProductProps) {
         </ImageContainer>
         <ProductDetails>
           <h1>{product.name}</h1>
-          <span>{product.price}</span>
+          <span>{priceFormatter.format(parseInt(product.price) / 100)}</span>
 
           <p>{product.description}</p>
           <button
@@ -101,10 +102,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
         id: product.id,
         name: product.name,
         imageUrl: product.images[0],
-        price: new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        }).format(price.unit_amount / 100),
+        price: price.unit_amount,
         description: product.description,
         defaultPriceId: price.id,
       },

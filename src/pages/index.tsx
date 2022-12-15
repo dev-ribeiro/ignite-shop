@@ -8,8 +8,9 @@ import Stripe from 'stripe'
 import Link from 'next/link'
 import Head from 'next/head'
 import { Handbag } from 'phosphor-react'
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 import { StoreContext } from '../contexts/StoreContext'
+import { priceFormatter } from '../utils/formatter'
 
 interface HomeProps {
   products: {
@@ -23,7 +24,27 @@ interface HomeProps {
 }
 
 export default function Home({ products }: HomeProps) {
-  const { openCheckoutCart } = useContext(StoreContext)
+  const { checkout, addProductToCart } = useContext(StoreContext)
+
+  function handleAddProductToCart(event: React.MouseEvent) {
+    const button = event.currentTarget as HTMLButtonElement
+
+    const productId = button.className
+
+    const selectedProduct = products.find((item) => {
+      return item.id === productId
+    })
+
+    const verifyProductInCheckout = checkout.some((product) => {
+      return product.id === selectedProduct.id
+    })
+
+    if (verifyProductInCheckout) {
+      alert('Produto já está no carrinho')
+    }
+
+    addProductToCart(selectedProduct)
+  }
 
   const [sliderRef] = useKeenSlider({
     slides: {
@@ -47,9 +68,11 @@ export default function Home({ products }: HomeProps) {
               <footer>
                 <div>
                   <strong>{product.name}</strong>
-                  <span>{product.price}</span>
+                  <span>
+                    {priceFormatter.format(parseInt(product.price) / 100)}
+                  </span>
                 </div>
-                <button onClick={() => openCheckoutCart()}>
+                <button className={product.id} onClick={handleAddProductToCart}>
                   <Handbag size={32} />
                 </button>
               </footer>
@@ -73,10 +96,7 @@ export const getStaticProps: GetStaticProps = async () => {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
-      price: new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-      }).format(price.unit_amount / 100),
+      price: price.unit_amount,
       description: product.description,
       defaultPriceId: price.id,
     }

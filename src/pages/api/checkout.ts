@@ -1,15 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { stripe } from '../../lib/stripe'
 
-interface Product {
-  id: string
-  name: string
-  imageUrl: string
-  price: string
-  description: string
-  defaultPriceId: string
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -18,9 +9,9 @@ export default async function handler(
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const checkoutProducts = JSON.parse(req.body.checkout) as Product[]
+  const { checkout } = req.body
 
-  if (!checkoutProducts) {
+  if (!checkout) {
     return res.status(400).json({ error: 'Price not found' })
   }
 
@@ -31,7 +22,12 @@ export default async function handler(
     success_url: successUrl,
     cancel_url: cancelUrl,
     mode: 'payment',
-    line_items: checkoutProducts,
+    line_items: checkout.map((product) => {
+      return {
+        price: product.defaultPriceId,
+        quantity: 1,
+      }
+    }),
   })
 
   return res.status(201).json({ checkoutUrl: checkoutSession.url })

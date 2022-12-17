@@ -1,8 +1,8 @@
-import axios from 'axios'
 import Image from 'next/image'
 import { X } from 'phosphor-react'
 import { useContext, useState } from 'react'
 import { StoreContext } from '../../contexts/StoreContext'
+import { api } from '../../lib/axios'
 import { priceFormatter } from '../../utils/formatter'
 import {
   CheckoutCartContainer,
@@ -25,8 +25,8 @@ export function CheckoutCart() {
   async function handleBuyProduct() {
     try {
       setIsCreatingCheckoutSession(true)
-      const response = await axios.post('/api/checkout', {
-        checkoutPricesId: JSON.stringify(checkout),
+      const response = await api.post('/api/checkout', {
+        checkout,
       })
 
       const { checkoutUrl } = response.data
@@ -35,6 +35,7 @@ export function CheckoutCart() {
     } catch (error) {
       // Conectar com Datadog ou Sentry
       setIsCreatingCheckoutSession(false)
+      console.error(error)
       alert('Falha ao registrar o checkout')
     }
   }

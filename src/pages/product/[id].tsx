@@ -39,7 +39,6 @@ export default function Product({ product }: ProductProps) {
   }, [checkout])
 
   function handleSendProductToCheckoutCart() {
-    console.log(product)
     addProductToCart(product)
   }
 
